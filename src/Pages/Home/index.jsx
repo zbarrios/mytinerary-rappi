@@ -149,14 +149,14 @@ const CarouselTwo = () => {
     calculateDimensions();
 
     // Crear una versión "debounceada" de calculateDimensions
-    const debouncedHandleResize = debounce(calculateDimensions, 100); // 100ms de retraso
+    const debouncedHandleResize = debounce(calculateDimensions, 300); // 300ms de retraso
 
     // Escuchar eventos de redimensionamiento
     window.addEventListener("resize", debouncedHandleResize);
 
     // Limpiar el event listener al desmontar el componente
     return () => {
-      window.removeEventListener("resize", calculateDimensions);
+      window.removeEventListener("resize", debouncedHandleResize);
       debouncedHandleResize.cancel();
     };
   }, []);
@@ -165,7 +165,7 @@ const CarouselTwo = () => {
   const calculateDimensions = () => {
     if (carouselRef.current) {
       const visibleWidth = carouselRef.current.clientWidth;
-      const totalWidth = carouselRef.current.scrollWidth;
+      const totalWidth = carouselRef.current.scrollWidth+300;
       const itemWidth = totalWidth / images.length;
       setStep(itemWidth);
       setMaxScrollAmount(totalWidth - visibleWidth);
@@ -224,6 +224,8 @@ const CarouselTwo = () => {
     setIsTransitioning(true);
   };
 
+  const parallaxCont = 0.2
+
   return (
     <div className="carousel-container">
       {scrollAmount > 0 && (
@@ -265,7 +267,15 @@ const CarouselTwo = () => {
           {text}
           {images.map((image, index) => (
             <div key={index} className="carousel-item">
-              <img src={image} alt={`Imagen ${index + 1}`} />
+              <div
+                className="carousel-item-absolute"
+                style={{
+                  transform: `translateX(-${scrollAmount * parallaxCont}px)`,
+                  transition: isTransitioning ? "transform 0.5s ease" : "none",
+                }}
+              >
+                <img src={image} alt={`Imagen ${index + 1}`} />
+              </div>
             </div>
           ))}
         </div>
@@ -278,175 +288,3 @@ const CarouselTwo = () => {
     </div>
   );
 };
-
-// const CarouselTwo = () => {
-//   const carouselRef = useRef(null);
-//   const carouselWrapperRef = useRef(null);
-//   const [scrollAmount, setScrollAmount] = useState(0);
-//   const [step, setStep] = useState(0);
-//   const [maxScrollAmount, setMaxScrollAmount] = useState(0);
-//   const [isTransitioning, setIsTransitioning] = useState(true); // Estado para controlar la transición
-
-//   // Referencias para la funcionalidad de arrastrar
-//   const isDragging = useRef(false);
-//   const startX = useRef(0);
-//   const initialScroll = useRef(0);
-
-//   // Función para calcular dimensiones
-//   const calculateDimensions = () => {
-//     if (carouselRef.current) {
-//       const visibleWidth = carouselRef.current.clientWidth;
-//       const totalWidth = carouselRef.current.scrollWidth;
-//       const itemWidth = totalWidth / images.length;
-//       setStep(itemWidth);
-//       setMaxScrollAmount(totalWidth - visibleWidth);
-
-//       // Ajustar scrollAmount si es necesario
-//       setScrollAmount((prev) => {
-//         return prev > (totalWidth - visibleWidth) ? (totalWidth - visibleWidth) : prev;
-//       });
-//     }
-//   };
-
-//   useEffect(() => {
-//     // Calcular dimensiones al montar el componente
-//     calculateDimensions();
-
-//     // Crear una versión "debounceada" de calculateDimensions
-//     const debouncedHandleResize = debounce(calculateDimensions, 100); // 100ms de retraso
-
-//     // Escuchar eventos de redimensionamiento con debounce
-//     window.addEventListener('resize', debouncedHandleResize);
-
-//     // Limpiar el event listener al desmontar el componente
-//     return () => {
-//       window.removeEventListener('resize', debouncedHandleResize);
-//       debouncedHandleResize.cancel(); // Cancelar cualquier llamada pendiente
-//     };
-//   }, []);
-
-//   const handleNext = () => {
-//     setScrollAmount((prev) => {
-//       const newScrollAmount = Math.min(prev + step, maxScrollAmount);
-//       return newScrollAmount;
-//     });
-//   };
-
-//   const handlePrev = () => {
-//     setScrollAmount((prev) => {
-//       const newScrollAmount = Math.max(prev - step, 0);
-//       return newScrollAmount;
-//     });
-//   };
-
-//   // Función para iniciar el arrastre
-//   const handleDragStart = (clientX) => {
-//     isDragging.current = true;
-//     startX.current = clientX;
-//     initialScroll.current = scrollAmount;
-//     setIsTransitioning(false); // Desactivar la transición
-//     if (carouselWrapperRef.current) {
-//       carouselWrapperRef.current.classList.add('no-select');
-//     }
-//   };
-
-//   // Función para manejar el movimiento durante el arrastre
-//   const handleDragMove = (clientX) => {
-//     if (!isDragging.current) return;
-//     const deltaX = clientX - startX.current;
-//     let newScroll = initialScroll.current - deltaX;
-
-//     // Asegurarse de que newScroll esté dentro de los límites
-//     newScroll = Math.max(0, Math.min(newScroll, maxScrollAmount));
-//     setScrollAmount(newScroll);
-//   };
-
-//   // Función para terminar el arrastre
-//   const handleDragEnd = () => {
-//     if (isDragging.current) {
-//       isDragging.current = false;
-//       setIsTransitioning(true); // Activar la transición
-//       if (carouselWrapperRef.current) {
-//         carouselWrapperRef.current.classList.remove('no-select');
-//       }
-//     }
-//   };
-
-//   // Manejadores de eventos de mouse
-//   const onMouseDown = (e) => {
-//     handleDragStart(e.pageX);
-//     // Agregar listeners al window
-//     window.addEventListener('mousemove', onMouseMove);
-//     window.addEventListener('mouseup', onMouseUp);
-//   };
-
-//   const onMouseMove = (e) => {
-//     handleDragMove(e.pageX);
-//   };
-
-//   const onMouseUp = () => {
-//     handleDragEnd();
-//     // Remover listeners del window
-//     window.removeEventListener('mousemove', onMouseMove);
-//     window.removeEventListener('mouseup', onMouseUp);
-//   };
-
-//   // Manejadores de eventos táctiles
-//   const onTouchStart = (e) => {
-//     const touch = e.touches[0];
-//     handleDragStart(touch.pageX);
-//     // Agregar listeners al window
-//     window.addEventListener('touchmove', onTouchMove, { passive: false });
-//     window.addEventListener('touchend', onTouchEnd);
-//   };
-
-//   const onTouchMove = (e) => {
-//     const touch = e.touches[0];
-//     handleDragMove(touch.pageX);
-//     e.preventDefault(); // Prevenir el scroll de la página
-//   };
-
-//   const onTouchEnd = () => {
-//     handleDragEnd();
-//     // Remover listeners del window
-//     window.removeEventListener('touchmove', onTouchMove);
-//     window.removeEventListener('touchend', onTouchEnd);
-//   };
-
-//   return (
-//     <div className="carousel-container">
-//       <button className="carousel-btn left-btn" onClick={handlePrev}>
-//         ←
-//       </button>
-
-//       <div
-//         className="carousel-wrapper"
-//         ref={carouselWrapperRef}
-//         onMouseDown={onMouseDown}
-//         onTouchStart={onTouchStart}
-//         style={{ cursor: isDragging.current ? 'grabbing' : 'grab' }}
-//       >
-//         <div
-//           className="carousel"
-//           ref={carouselRef}
-//           style={{
-//             transform: `translateX(-${scrollAmount}px)`,
-//             transition: isTransitioning ? 'transform 0.5s ease' : 'none',
-//           }}
-//         >
-//           {images.map((image, index) => (
-//             <div key={index} className="carousel-item">
-//               <img src={image} alt={`Imagen ${index + 1}`} />
-//             </div>
-//           ))}
-//         </div>
-//       </div>
-
-//       <button className="carousel-btn right-btn" onClick={handleNext}>
-//         →
-//       </button>
-//     </div>
-//   );
-// };
-
-
