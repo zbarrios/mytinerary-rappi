@@ -19,21 +19,27 @@
 
 .carousel {
   display: flex;
-  gap: 10px;
+  gap: 25px;
   /* transition: transform 0.5s ease; */
 }
 
 .carousel-text {
-  min-width: calc(100% / 3);
+  min-width: calc(100% / 4);
+}
+
+.carousel-item-container {
+  min-width: calc(100% / 5);
+  height: 800px;
+  position: relative;
+  display: flex;
 }
 
 .carousel-item {
-  min-width: calc(100% / 5);
+  min-width: 100%;
   overflow: hidden;
   box-sizing: border-box;
   display: flex;
   position: relative;
-  border: 2px solid black;
   height: 800px;
   box-sizing: border-box;
 }
@@ -42,7 +48,6 @@
   width: 800px;
   position: absolute;
   overflow: hidden;
-  border: 2px solid red;
   height: 1000px;
 }
 
@@ -76,23 +81,32 @@
 @media screen and (min-width: 1025px) and (max-width: 1300px) {
   .carousel-item {
     min-width: calc(100% / 3);
-    box-sizing: border-box;
-    padding: 10px;
   }
 }
 
 @media screen and (min-width: 769px) and (max-width: 1024px) {
   .carousel-item {
     min-width: calc(100% / 2);
-    box-sizing: border-box;
-    padding: 10px;
   }
 }
 
-@media screen and (max-width: 768px) {
+@media screen and (min-width: 350px) and (max-width: 768px) {
   .carousel-item {
-    min-width: calc(100%);
-    box-sizing: border-box;
-    padding: 10px;
+    min-width: calc(90%);
+    height: 600px;
+  }
+
+  .carousel-item-absolute {
+    width: 600px;
+    position: absolute;
+    overflow: hidden;
+    height: 600px;
+  }
+
+  .carousel-item-absolute img {
+    height: 700px;
+    object-fit: cover;
+    user-select: none;
+    pointer-events: none;
   }
 }

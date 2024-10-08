@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import ContainerMain from "../../Layouts/ContainerMain";
 import ScreenContainer from "../../Layouts/ScreenContainer";
-import Pic from "../../assets/home.jpg";
 import debounce from "lodash.debounce";
 import "./home.css";
 
@@ -46,6 +45,9 @@ export default function Home() {
       </ScreenContainer> */}
       <ScreenContainer>
         <CarouselTwo></CarouselTwo>
+      </ScreenContainer>
+      <ScreenContainer>
+        <CarouselFinal></CarouselFinal>
       </ScreenContainer>
 
       {/* <div style={styles} className="h-screen w-screen flex justify-center">
@@ -124,6 +126,7 @@ const CarouselTwo = () => {
   const [scrollAmount, setScrollAmount] = useState(0);
   const [step, setStep] = useState(0);
   const [maxScrollAmount, setMaxScrollAmount] = useState(0);
+  const [visibleWidth, setVisibleWidth] = useState(0);
 
   // Estados para la funcionalidad de arrastrar
   const isDragging = useRef(false);
@@ -131,8 +134,10 @@ const CarouselTwo = () => {
   const initialScroll = useRef(0);
   const [isTransitioning, setIsTransitioning] = useState(true);
 
+  const [itemWidth, setItemWidth] = useState(0);
+
   const text = (
-    <div className="carousel-text flex flex-col sm:flex-row justify-between p-10">
+    <div className="carousel-text hidden lg:flex justify-between p-10">
       <div>
         <h3 className="font-display text-center sm:w-4/6 font-extrabold text-sm sm:text-3xl sm:mt-8 tracking-wide text-slate-700 sm:text-gray-300">
           Explore the World! adventure today!
@@ -149,7 +154,7 @@ const CarouselTwo = () => {
     calculateDimensions();
 
     // Crear una versión "debounceada" de calculateDimensions
-    const debouncedHandleResize = debounce(calculateDimensions, 300); // 300ms de retraso
+    const debouncedHandleResize = debounce(calculateDimensions, 500); // 300ms de retraso
 
     // Escuchar eventos de redimensionamiento
     window.addEventListener("resize", debouncedHandleResize);
@@ -164,19 +169,21 @@ const CarouselTwo = () => {
   // Función para calcular dimensiones
   const calculateDimensions = () => {
     if (carouselRef.current) {
-      const visibleWidth = carouselRef.current.clientWidth;
-      const totalWidth = carouselRef.current.scrollWidth+300;
-      const itemWidth = totalWidth / images.length;
+      const visibleWidthC = carouselRef.current.clientWidth;
+      const itemWidth = visibleWidth / 5 + 25;
+      const totalWidth = carouselRef.current.scrollWidth + itemWidth + 200;
       setStep(itemWidth);
-      setMaxScrollAmount(totalWidth - visibleWidth);
+      setMaxScrollAmount(totalWidth - visibleWidthC);
+      setItemWidth(itemWidth); // Añade esta línea
 
       // Ajustar scrollAmount si es necesario
       setScrollAmount((prev) => {
         // Si el scrollAmount actual excede el nuevo maxScrollAmount, ajustarlo
-        return prev > totalWidth - visibleWidth
-          ? totalWidth - visibleWidth
+        return prev > totalWidth - visibleWidthC
+          ? totalWidth - visibleWidthC
           : prev;
       });
+      setVisibleWidth(visibleWidthC);
     }
   };
 
@@ -224,7 +231,7 @@ const CarouselTwo = () => {
     setIsTransitioning(true);
   };
 
-  const parallaxCont = 0.2
+  const parallaxCont = 0.14;
 
   return (
     <div className="carousel-container">
@@ -265,20 +272,231 @@ const CarouselTwo = () => {
           }}
         >
           {text}
-          {images.map((image, index) => (
-            <div key={index} className="carousel-item">
-              <div
-                className="carousel-item-absolute"
-                style={{
-                  transform: `translateX(-${scrollAmount * parallaxCont}px)`,
-                  transition: isTransitioning ? "transform 0.5s ease" : "none",
-                }}
-              >
-                <img src={image} alt={`Imagen ${index + 1}`} />
+          {images.map((image, index) => {
+            const elementPosition = index * itemWidth + visibleWidth / 3 + 25;
+            const IsVisible = visibleWidth + scrollAmount > elementPosition;
+            const maxImageTranslateX = -290;
+            const amount =
+              elementPosition > visibleWidth
+                ? elementPosition - visibleWidth
+                : 0;
+            const imageTranslateX = IsVisible
+              ? Math.max(
+                  maxImageTranslateX,
+                  -(scrollAmount - amount) * parallaxCont
+                )
+              : 0;
+            return (
+              <div key={index} className="carousel-item">
+                <div
+                  className="carousel-item-absolute"
+                  style={{
+                    transform: `translateX(${imageTranslateX}px)`,
+                    transition: isTransitioning
+                      ? "transform 0.5s ease"
+                      : "none",
+                  }}
+                >
+                  <img src={image} alt={`Imagen ${index + 1}`} />
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
+      </div>
+      {scrollAmount < maxScrollAmount && (
+        <button className="carousel-btn right-btn" onClick={handleNext}>
+          →
+        </button>
+      )}
+    </div>
+  );
+};
+
+const CarouselFinal = () => {
+  const carouselRef = useRef(null);
+  const [scrollAmount, setScrollAmount] = useState(0);
+  const [step, setStep] = useState(0);
+  const [maxScrollAmount, setMaxScrollAmount] = useState(0);
+  const [visibleWidth, setVisibleWidth] = useState(0);
+
+  // Estados para la funcionalidad de arrastrar
+  const isDragging = useRef(false);
+  const startX = useRef(0);
+  const initialScroll = useRef(0);
+  const [isTransitioning, setIsTransitioning] = useState(true);
+
+  const [itemWidth, setItemWidth] = useState(0);
+
+  const text = (
+    <div className="carousel-text hidden lg:flex justify-between p-10">
+      <div>
+        <h3 className="font-display text-center sm:w-4/6 font-extrabold text-sm sm:text-3xl sm:mt-8 tracking-wide text-slate-700 sm:text-gray-300">
+          Explore the World! adventure today!
+        </h3>
+        <p className="text-center sm:w-4/6 font-extrabold text-sm sm:text-3xl sm:mt-8 tracking-wide text-slate-700 sm:text-gray-300">
+          Check out available cities and book your next
+        </p>
+      </div>
+    </div>
+  );
+
+  useEffect(() => {
+    // Calcular dimensiones al montar el componente
+    calculateDimensions();
+
+    // Crear una versión "debounceada" de calculateDimensions
+    const debouncedHandleResize = debounce(calculateDimensions, 500); // 300ms de retraso
+
+    // Escuchar eventos de redimensionamiento
+    window.addEventListener("resize", debouncedHandleResize);
+
+    // Limpiar el event listener al desmontar el componente
+    return () => {
+      window.removeEventListener("resize", debouncedHandleResize);
+      debouncedHandleResize.cancel();
+    };
+  }, []);
+
+  // Función para calcular dimensiones
+  const calculateDimensions = () => {
+    if (carouselRef.current) {
+      const visibleWidthC = carouselRef.current.clientWidth;
+      const itemWidth = visibleWidth / 5 + 25;
+      const totalWidth = carouselRef.current.scrollWidth + itemWidth + 200;
+      setStep(itemWidth);
+      setMaxScrollAmount(totalWidth - visibleWidthC);
+      setItemWidth(itemWidth); // Añade esta línea
+
+      // Ajustar scrollAmount si es necesario
+      setScrollAmount((prev) => {
+        // Si el scrollAmount actual excede el nuevo maxScrollAmount, ajustarlo
+        return prev > totalWidth - visibleWidthC
+          ? totalWidth - visibleWidthC
+          : prev;
+      });
+      setVisibleWidth(visibleWidthC);
+    }
+  };
+
+  const handleNext = () => {
+    setScrollAmount((prev) => {
+      const newScrollAmount = Math.min(prev + step, maxScrollAmount);
+      return newScrollAmount;
+    });
+  };
+
+  const handlePrev = () => {
+    setScrollAmount((prev) => {
+      const newScrollAmount = Math.max(prev - step, 0);
+      return newScrollAmount;
+    });
+  };
+
+  // Funciones para manejar el arrastre
+  const handleMouseDown = (e) => {
+    isDragging.current = true;
+    startX.current = e.pageX - carouselRef.current.offsetLeft;
+    initialScroll.current = scrollAmount;
+    setIsTransitioning(false);
+  };
+
+  const handleMouseMove = (e) => {
+    if (!isDragging.current) return;
+    e.preventDefault();
+    const x = e.pageX - carouselRef.current.offsetLeft;
+    const walk = x - startX.current; // Distancia arrastrada
+    let newScroll = initialScroll.current - walk;
+
+    // Asegurarse de que newScroll esté dentro de los límites
+    newScroll = Math.max(0, Math.min(newScroll, maxScrollAmount));
+    setScrollAmount(newScroll);
+  };
+
+  const handleMouseUp = () => {
+    isDragging.current = false;
+    setIsTransitioning(true);
+  };
+
+  const handleMouseLeave = () => {
+    isDragging.current = false;
+    setIsTransitioning(true);
+  };
+
+  const parallaxCont = 0.14;
+
+  return (
+    <div className="carousel-container">
+      {scrollAmount > 0 && (
+        <button className="carousel-btn left-btn" onClick={handlePrev}>
+          ←
+        </button>
+      )}
+
+      <div
+        className="carousel-wrapper"
+        onMouseDown={handleMouseDown}
+        onMouseMove={handleMouseMove}
+        onMouseUp={handleMouseUp}
+        onMouseLeave={handleMouseLeave}
+        // Opcional: para mejorar la experiencia en dispositivos táctiles
+        onTouchStart={(e) => {
+          const touch = e.touches[0];
+          handleMouseDown({
+            pageX: touch.pageX,
+          });
+        }}
+        onTouchMove={(e) => {
+          const touch = e.touches[0];
+          handleMouseMove({
+            pageX: touch.pageX,
+            preventDefault: () => e.preventDefault(),
+          });
+        }}
+        onTouchEnd={handleMouseUp}
+      >
+        <ul
+          className="carousel"
+          ref={carouselRef}
+          style={{
+            transform: `translateX(-${scrollAmount}px)`,
+            transition: isTransitioning ? "transform 0.5s ease" : "none",
+          }}
+        >
+ 
+          {images.map((image, index) => {
+            const elementPosition = index * itemWidth + visibleWidth / 3 + 25;
+            const IsVisible = visibleWidth + scrollAmount > elementPosition;
+            const maxImageTranslateX = -290;
+            const amount =
+              elementPosition > visibleWidth
+                ? elementPosition - visibleWidth
+                : 0;
+            const imageTranslateX = IsVisible
+              ? Math.max(
+                  maxImageTranslateX,
+                  -(scrollAmount - amount) * parallaxCont
+                )
+              : 0;
+            return (
+              <li  key={index} className="carousel-item-container">
+                <div className="carousel-item">
+                  <div
+                    className="carousel-item-absolute"
+                    style={{
+                      transform: `translateX(${imageTranslateX}px)`,
+                      transition: isTransitioning
+                        ? "transform 0.5s ease"
+                        : "none",
+                    }}
+                  >
+                    <img src={image} alt={`Imagen ${index + 1}`} />
+                  </div>
+                </div>
+              </li>
+            );
+          })}
+        </ul>
       </div>
       {scrollAmount < maxScrollAmount && (
         <button className="carousel-btn right-btn" onClick={handleNext}>
