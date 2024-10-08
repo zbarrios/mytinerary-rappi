@@ -328,19 +328,6 @@ const CarouselFinal = () => {
 
   const [itemWidth, setItemWidth] = useState(0);
 
-  const text = (
-    <div className="carousel-text hidden lg:flex justify-between p-10">
-      <div>
-        <h3 className="font-display text-center sm:w-4/6 font-extrabold text-sm sm:text-3xl sm:mt-8 tracking-wide text-slate-700 sm:text-gray-300">
-          Explore the World! adventure today!
-        </h3>
-        <p className="text-center sm:w-4/6 font-extrabold text-sm sm:text-3xl sm:mt-8 tracking-wide text-slate-700 sm:text-gray-300">
-          Check out available cities and book your next
-        </p>
-      </div>
-    </div>
-  );
-
   useEffect(() => {
     // Calcular dimensiones al montar el componente
     calculateDimensions();
@@ -362,11 +349,20 @@ const CarouselFinal = () => {
   const calculateDimensions = () => {
     if (carouselRef.current) {
       const visibleWidthC = carouselRef.current.clientWidth;
-      const itemWidth = visibleWidth / 5 + 25;
-      const totalWidth = carouselRef.current.scrollWidth + itemWidth + 200;
-      setStep(itemWidth);
+      const itemElements =
+        carouselRef.current.getElementsByClassName("carrousel-item");
+
+      const areThereElementes = itemElements.length > 0;
+      const itemStyle = areThereElementes
+        ? getComputedStyle(itemElements[0])
+        : 0;
+      const itemWidthC = areThereElementes
+        ? itemElements[0].offsetWidth + parseFloat(itemStyle.marginRight)
+        : 0;
+      setItemWidth(itemWidthC); //Same value Step
+      setStep(itemWidthC); //Same value Step
+      const totalWidth = carouselRef.current.scrollWidth + itemWidthC;
       setMaxScrollAmount(totalWidth - visibleWidthC);
-      setItemWidth(itemWidth); // Añade esta línea
 
       // Ajustar scrollAmount si es necesario
       setScrollAmount((prev) => {
@@ -423,18 +419,29 @@ const CarouselFinal = () => {
     setIsTransitioning(true);
   };
 
-  const parallaxCont = 0.14;
+  const parallaxCont = 0.3;
+
+  // console.log("itemWidth", itemWidth);
+  // console.log("step", step);
+  // console.log("visibleWidth", visibleWidth);
+  // console.log("maxScrollAmount", maxScrollAmount);
+  // console.log("scrollAmount", scrollAmount);
 
   return (
     <div className="carrousel-container">
       {scrollAmount > 0 && (
-        <button className="carousel-btn left-btn" onClick={handlePrev}>
+        <button className="carrousel-btn left-btn" onClick={handlePrev}>
           ←
         </button>
       )}
 
-      <div
-        className="carousel-wrapper"
+      <ul
+        className="carrousel"
+        ref={carouselRef}
+        style={{
+          transform: `translateX(-${scrollAmount}px)`,
+          transition: isTransitioning ? "transform 0.5s ease" : "none",
+        }}
         onMouseDown={handleMouseDown}
         onMouseMove={handleMouseMove}
         onMouseUp={handleMouseUp}
@@ -455,51 +462,45 @@ const CarouselFinal = () => {
         }}
         onTouchEnd={handleMouseUp}
       >
-        <ul
-          className="carousel"
-          ref={carouselRef}
-          style={{
-            transform: `translateX(-${scrollAmount}px)`,
-            transition: isTransitioning ? "transform 0.5s ease" : "none",
-          }}
-        >
- 
-          {images.map((image, index) => {
-            const elementPosition = index * itemWidth + visibleWidth / 3 + 25;
-            const IsVisible = visibleWidth + scrollAmount > elementPosition;
-            const maxImageTranslateX = -290;
-            const amount =
-              elementPosition > visibleWidth
-                ? elementPosition - visibleWidth
-                : 0;
-            const imageTranslateX = IsVisible
-              ? Math.max(
-                  maxImageTranslateX,
-                  -(scrollAmount - amount) * parallaxCont
-                )
-              : 0;
-            return (
-              <li  key={index} className="carousel-item-container">
-                <div className="carousel-item">
-                  <div
-                    className="carousel-item-absolute"
-                    style={{
-                      transform: `translateX(${imageTranslateX}px)`,
-                      transition: isTransitioning
-                        ? "transform 0.5s ease"
-                        : "none",
-                    }}
-                  >
-                    <img src={image} alt={`Imagen ${index + 1}`} />
-                  </div>
+        {images.map((image, index) => {
+          const elementPosition = index * itemWidth;
+          console.log("scrollAmount", scrollAmount);
+          console.log("itemWidth", itemWidth);
+
+          console.log("elementPosition", elementPosition);
+
+          const IsVisible = visibleWidth + scrollAmount > elementPosition;
+          const maxImageTranslateX = -itemWidth;
+          const amount =
+            elementPosition > visibleWidth ? elementPosition - visibleWidth : 0;
+          const imageTranslateX = IsVisible
+            ? Math.max(
+                maxImageTranslateX,
+                -(scrollAmount - amount) * parallaxCont
+              )
+            : 0;
+          return (
+            <li key={index} className="carrousel-item">
+              <div className="carrousel-item-container">
+                <div
+                  className="carrousel-item-image"
+                  style={{
+                    transform: `translateX(${imageTranslateX}px)`,
+                    transition: isTransitioning
+                      ? "transform 0.5s ease"
+                      : "none",
+                  }}
+                >
+                  <img src={image} alt={`Imagen ${index + 1}`} />
                 </div>
-              </li>
-            );
-          })}
-        </ul>
-      </div>
+              </div>
+            </li>
+          );
+        })}
+      </ul>
+
       {scrollAmount < maxScrollAmount && (
-        <button className="carousel-btn right-btn" onClick={handleNext}>
+        <button className="carrousel-btn right-btn" onClick={handleNext}>
           →
         </button>
       )}
