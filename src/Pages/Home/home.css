@@ -28,14 +28,14 @@
 }
 
 .carousel-item-container {
-  min-width: calc(100% / 5);
+  min-width: 600px;
   height: 800px;
   position: relative;
   display: flex;
 }
 
 .carousel-item {
-  min-width: 100%;
+  min-width: calc(100% / 5);
   overflow: hidden;
   box-sizing: border-box;
   display: flex;
@@ -110,3 +110,121 @@
     pointer-events: none;
   }
 }
+
+
+
+
+
+
+.carrousel-container {
+  position: relative;
+  width: 100%;
+  margin: 0 auto;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+}
+
+.carousel-wrapper {
+  overflow: hidden;
+  width: 100%;
+  cursor: grab;
+}
+.carousel-wrapper:active {
+  cursor: grabbing; /* Cambiar el cursor a "grabbing" cuando se hace clic */
+}
+
+.carousel {
+  display: flex;
+  gap: 25px;
+  /* transition: transform 0.5s ease; */
+}
+
+.carousel-text {
+  min-width: calc(100% / 4);
+}
+
+.carousel-item-container {
+  min-width: 600px;
+  height: 800px;
+  position: relative;
+  display: flex;
+}
+
+.carousel-item {
+  min-width: calc(100% / 5);
+  overflow: hidden;
+  box-sizing: border-box;
+  display: flex;
+  position: relative;
+  height: 800px;
+  box-sizing: border-box;
+}
+
+.carousel-item-absolute {
+  width: 800px;
+  position: absolute;
+  overflow: hidden;
+  height: 1000px;
+}
+
+.carousel-item-absolute img {
+  height: 1000px;
+  object-fit: cover;
+  user-select: none;
+  pointer-events: none;
+}
+
+.carousel-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+  border: none;
+  cursor: pointer;
+  z-index: 1;
+  padding: 10px;
+}
+
+.left-btn {
+  left: 30px;
+}
+
+.right-btn {
+  right: 30px;
+}
+
+@media screen and (min-width: 1025px) and (max-width: 1300px) {
+  .carousel-item {
+    min-width: calc(100% / 3);
+  }
+}
+
+@media screen and (min-width: 769px) and (max-width: 1024px) {
+  .carousel-item {
+    min-width: calc(100% / 2);
+  }
+}
+
+@media screen and (min-width: 350px) and (max-width: 768px) {
+  .carousel-item {
+    min-width: calc(90%);
+    height: 600px;
+  }
+
+  .carousel-item-absolute {
+    width: 600px;
+    position: absolute;
+    overflow: hidden;
+    height: 600px;
+  }
+
+  .carousel-item-absolute img {
+    height: 700px;
+    object-fit: cover;
+    user-select: none;
+    pointer-events: none;
+  }
+}
+

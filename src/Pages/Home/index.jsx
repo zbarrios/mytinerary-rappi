@@ -426,7 +426,7 @@ const CarouselFinal = () => {
   const parallaxCont = 0.14;
 
   return (
-    <div className="carousel-container">
+    <div className="carrousel-container">
       {scrollAmount > 0 && (
         <button className="carousel-btn left-btn" onClick={handlePrev}>
           ←
