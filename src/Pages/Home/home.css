@@ -1,127 +1,41 @@
-/* Carousel.css */
-.carousel-container {
+.hero-background {
   position: relative;
   width: 100%;
-  margin: 0 auto;
-  overflow: hidden;
+  height: 100vh;
   display: flex;
-  align-items: center;
+  justify-content: center;
 }
 
-.carousel-wrapper {
-  overflow: hidden;
-  width: 100%;
-  cursor: grab;
-}
-.carousel-wrapper:active {
-  cursor: grabbing; /* Cambiar el cursor a "grabbing" cuando se hace clic */
-}
-
-.carousel {
+.hero-texts {
   display: flex;
-  gap: 25px;
-  /* transition: transform 0.5s ease; */
+  flex-direction: column;
+  justify-content: center;
+  margin-top: 9vh;
 }
 
-.carousel-text {
-  min-width: calc(100% / 4);
+.title {
+  font-family: "Magilio", serif;
+  font-size: 8rem;
+  font-size: calc(6vw + 2rem);
+  text-align: center;
+  color: #d9d0c5;
 }
 
-.carousel-item-container {
-  min-width: 600px;
-  height: 800px;
-  position: relative;
-  display: flex;
+.subtitle {
+  font-size: 1rem;
+  color: #d9d0c5;
+  text-align: center;
+  padding: 10px 25px;
+  font-weight: 400;
 }
 
-.carousel-item {
-  min-width: calc(100% / 5);
-  overflow: hidden;
-  box-sizing: border-box;
-  display: flex;
-  position: relative;
-  height: 800px;
-  box-sizing: border-box;
+.carrousel-stats {
+  background-color: #011f26;
 }
 
-.carousel-item-absolute {
-  width: 800px;
-  position: absolute;
-  overflow: hidden;
-  height: 1000px;
+.carrousel-main {
+  background-color: #d9d0c5;
 }
-
-.carousel-item-absolute img {
-  height: 1000px;
-  object-fit: cover;
-  user-select: none;
-  pointer-events: none;
-}
-
-.carousel-btn {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  background-color: rgba(0, 0, 0, 0.5);
-  color: white;
-  border: none;
-  cursor: pointer;
-  z-index: 1;
-  padding: 10px;
-}
-
-.left-btn {
-  left: 30px;
-}
-
-.right-btn {
-  right: 30px;
-}
-
-@media screen and (min-width: 1025px) and (max-width: 1300px) {
-  .carousel-item {
-    min-width: calc(100% / 3);
-  }
-}
-
-@media screen and (min-width: 769px) and (max-width: 1024px) {
-  .carousel-item {
-    min-width: calc(100% / 2);
-  }
-}
-
-@media screen and (min-width: 350px) and (max-width: 768px) {
-  .carousel-item {
-    min-width: calc(90%);
-    height: 600px;
-  }
-
-  .carousel-item-absolute {
-    width: 600px;
-    position: absolute;
-    overflow: hidden;
-    height: 600px;
-  }
-
-  .carousel-item-absolute img {
-    height: 700px;
-    object-fit: cover;
-    user-select: none;
-    pointer-events: none;
-  }
-}
-
-/**
-
-
-
-
-
-
-
-
-
-*/
 
 .carrousel-container {
   position: relative;
@@ -136,25 +50,34 @@
   display: flex;
   width: 100%;
   height: 100%;
-  pointer-events: all;
+}
+
+.carrousel-item-text {
+  display: none;
+  user-select: none;
 }
 
 .carrousel-item {
   padding: 20px;
   min-width: calc(100%);
+  box-sizing: border-box;
 }
 
 .carrousel-item-container {
+  background: rgba(0, 0, 0, 0.2);
   position: relative;
   display: flex;
+  justify-content: space-between;
   flex-direction: column;
   height: 100%;
   overflow: hidden;
+  user-select: none;
 }
 
 .carrousel-item-image {
+  z-index: -10;
   position: absolute;
-  width: 200%;
+  width: 250%;
   height: 100%;
   bottom: 15%;
   pointer-events: none;
@@ -165,6 +88,62 @@
   width: 100%;
   height: 150%;
   pointer-events: none;
+}
+
+.continent-carrousel p {
+  color: rgba(255, 255, 255, 0.7);
+  padding: 20px;
+  font-weight: 600;
+  font-size: small;
+  cursor: default;
+}
+
+.nav-carrousel {
+  height: 45%;
+  color: rgba(255, 255, 255, 0.7);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  user-select: none;
+}
+
+.city-carrousel {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: x-large;
+  font-weight: 500;
+  font-family: "Magilio", serif;
+  display: flex;
+  flex-direction: column;
+  transition: color 200ms ease-in-out, transform 200ms ease-in-out;
+}
+
+.description-carrousel {
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.9);
+  transition: color 200ms ease-in-out, transform 300ms ease-in-out;
+}
+
+.city-carrousel:hover,
+.description-carrousel:hover {
+  color: rgba(255, 255, 255, 1);
+  transform: scale(1.01);
+}
+
+.nav-carrousel button {
+  margin-bottom: 5%;
+  width: 40%;
+  color: rgba(255, 255, 255, 0.9);
+  padding-left: 1%;
+  text-align: left;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.7);
+  transition: color 200ms ease-in-out, transform 200ms ease-in-out;
+}
+
+.nav-carrousel button:hover {
+  border-bottom: 0px;
+  color: rgba(255, 255, 255, 1);
+  transform: scale(1.02);
 }
 
 .carrousel-btn {
@@ -187,35 +166,86 @@
   right: 30px;
 }
 
+.section-phone {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  background-color: #d9d0c5;
+  padding: 10% 30px;
+  gap: 20px;
+  color: #011f26;
+}
+
+.section-phone h3 {
+  font-family: 'Magilio', serif;
+  font-size: 2rem;
+}
+
 @media screen and (min-width: 640px) {
   .carrousel {
     height: 80%;
   }
 
   .carrousel-item {
-    padding: 20px;
-    min-width: calc(100% / 2);
+    padding-right: 10px;
+    min-width: calc(100% / 3);
+  }
+  .subtitle {
+    padding: 0 10%;
+    font-size: 1.5rem;
+    font-weight: 600;
+  }
+
+  .hero-texts {
+    margin-top: 10vh;
   }
 }
 
 @media screen and (min-width: 1024px) {
-  .carrousel {
-    height: 90%;
+
+  .carrousel-item-text {
+    display: flex;
+    min-width: calc(40%);
+    align-items: end;
+  }
+
+  .carrousel-text-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
+    padding-left: 25%;
+    padding-right: 15%;
+    height: 50%;
+    gap: 20px;
+    margin-bottom: 5%;
+  }
+
+  .carrousel-text-container h3 {
+    color: #011f26;
+    font-size: xx-large;
+    font-family: "Magilio", serif;
+  }
+
+  .carrousel-text-container p {
+    color: #011f26;
+    font-size: large;
   }
 
   .carrousel-item {
-    padding: 20px;
-    min-width: calc(100% / 3);
+    padding: 0%;
+    padding-right: 25px;
+    min-width: calc(100% / 4);
+  }
+
+  .section-phone {
+    display: none; 
   }
 }
 
 @media screen and (min-width: 1280px) {
-  .carrousel {
-    height: 90%;
-  }
-
   .carrousel-item {
-    padding: 20px;
-    min-width: calc(100% / 3.5);
+    padding: 0%;
+    padding-right: 25px;
+    min-width: calc(100% / 4.5);
   }
 }
