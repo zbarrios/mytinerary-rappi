@@ -1,16 +1,27 @@
 import { NavLink } from "react-router-dom";
 import "./navbar.css";
 import TravelLogo from "../assets/travel.png";
+import { useDispatch } from "react-redux";
+import { useEffect } from "react";
+import { getCities } from "../../store/actions/citiesActions";
 const routes = [
   { to: "/", text: "Home" },
   { to: "/cities", text: "Cities" },
+  { to: "/sign-in", text: "Login" },
 ];
 
 export default function NavBar() {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getCities());
+  }, [dispatch]);
+
   return (
     <nav className="navbar">
-      {/* <NavLink><img src={TravelLogo} alt="logo" className=" h-6 sm:h-8 sm:mt-8"/></NavLink> */}
-      <NavLink><span className="logo">Logo</span></NavLink>
+      <NavLink>
+        <span className="logo">Logo</span>
+      </NavLink>
       <ul className="navbar-routes">
         {routes.map((route, index) => (
           <li
@@ -20,7 +31,7 @@ export default function NavBar() {
             <NavLink
               to={route.to}
               className={({ isActive }) =>
-                isActive ? "text-emerald-800 hover:text-emerald-800" : ""
+                isActive ? "text-emerald-500 hover:text-emerald-700" : ""
               }
             >
               {route.text}
@@ -28,7 +39,13 @@ export default function NavBar() {
           </li>
         ))}
       </ul>
-      <NavLink><img src="https://cdn-icons-png.flaticon.com/512/25/25231.png" alt="user" className="h-6 sm:h-8"/></NavLink>
+      <NavLink>
+        <img
+          src="https://cdn-icons-png.flaticon.com/512/25/25231.png"
+          alt="user"
+          className="h-6 sm:h-8"
+        />
+      </NavLink>
     </nav>
   );
 }

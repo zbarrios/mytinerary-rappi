@@ -4,7 +4,7 @@ import "./footer.css";
 export default function Footer() {
   return (
     <footer>
-      <div class="footer-section" id="contact-info">
+      <div className="footer-section" id="contact-info">
         <h3>Contact Information</h3>
         <p>Address: Traveler's Street 123, Global City, Dreamland</p>
         <p>Phone: +123 456 789 000</p>
@@ -17,7 +17,7 @@ export default function Footer() {
         <p>Business Hours: Monday to Friday, from 9:00 AM to 6:00 PM</p>
       </div>
 
-      <div class="footer-section" id="useful-links">
+      <div className="footer-section" id="useful-links">
         <h3>Useful Links</h3>
         <ul>
           <li>
@@ -38,7 +38,7 @@ export default function Footer() {
         </ul>
       </div>
 
-      <div class="footer-section" id="social-media">
+      <div className="footer-section" id="social-media">
         <h3>Follow Us on Social Media</h3>
         <p>Connect with us!</p>
         <ul>
@@ -53,7 +53,7 @@ export default function Footer() {
           </li>
         </ul>
 
-        <div class="newsletter">
+        <div className="newsletter">
           <h3>Subscribe to our Newsletter</h3>
           <form action="#">
             <input type="email" placeholder="Your email address" required />

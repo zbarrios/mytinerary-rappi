@@ -5,6 +5,8 @@ import ScreenHelperContainer from "../../Layouts/ScreenHelperContainer";
 import debounce from "lodash.debounce";
 import "./home.css";
 import { NavLink } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { getCities } from "../../../store/actions/citiesActions";
 
 const styles = {
   backgroundImage: `url("https://images.pexels.com/photos/4239622/pexels-photo-4239622.jpeg")`,
@@ -29,7 +31,16 @@ export default function Home() {
       </div>
       <ScreenContainer classToAdd="carrousel-stats">
         <div className="flex flex-col justify-center h-full">
-        <p style={{color: "#d9d0c5",fontFamily: "Magilio", fontSize: "2rem", display: "inline" }}>Soon...</p>
+          <p
+            style={{
+              color: "#d9d0c5",
+              fontFamily: "Magilio",
+              fontSize: "2rem",
+              display: "inline",
+            }}
+          >
+            Soon...
+          </p>
         </div>
       </ScreenContainer>
 
@@ -81,70 +92,70 @@ const images = [
     description:
       "The Roman Colosseum, one of the most emblematic architectural wonders of the Roman Empire.",
   },
-  {
-    url: "https://images.pexels.com/photos/912897/pexels-photo-912897.jpeg",
-    city: "New York",
-    country: "United States",
-    continent: "North America",
-    description:
-      "The iconic Brooklyn Bridge connecting Manhattan with Brooklyn, one of New York’s most recognized structures.",
-  },
-  {
-    url: "https://images.pexels.com/photos/1929611/pexels-photo-1929611.jpeg",
-    city: "London",
-    country: "United Kingdom",
-    continent: "Europe",
-    description:
-      "The famous Big Ben next to Parliament, a symbol of the British government and a tourist icon.",
-  },
-  {
-    url: "https://images.pexels.com/photos/12238221/pexels-photo-12238221.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-    city: "Toronto",
-    country: "Canada",
-    continent: "North America",
-    description:
-      "The Toronto skyline with the CN Tower, one of the tallest buildings in the world and a symbol of the city.",
-  },
-  {
-    url: "https://images.unsplash.com/photo-1466442929976-97f336a657be?q=80&w=987&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    city: "Cairo",
-    country: "Egypt",
-    continent: "Africa",
-    description:
-      "View of the Pyramids of Giza, one of the greatest architectural achievements of Egyptian civilization.",
-  },
-  {
-    url: "https://images.pexels.com/photos/3290070/pexels-photo-3290070.jpeg",
-    city: "Venice",
-    country: "Italy",
-    continent: "Europe",
-    description:
-      "The canals of Venice, a unique city built on water with its network of bridges and gondolas.",
-  },
-  {
-    url: "https://images.pexels.com/photos/1682794/pexels-photo-1682794.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-    city: "Dubai",
-    country: "United Arab Emirates",
-    continent: "Asia",
-    description:
-      "The modern skyline of Dubai with the Burj Khalifa, the tallest building in the world.",
-  },
-  {
-    url: "https://images.pexels.com/photos/19283363/pexels-photo-19283363/free-photo-of-taxis-on-street-in-hong-kong.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-    city: "Hong Kong",
-    country: "China",
-    continent: "Asia",
-    description:
-      "The vibrant streets of Hong Kong with its characteristic red taxis and modern architecture.",
-  },
-  {
-    url: "https://images.pexels.com/photos/15009437/pexels-photo-15009437/free-photo-of-ferryboat-cruising-near-the-sydney-opera-house.jpeg",
-    city: "Sydney",
-    country: "Australia",
-    continent: "Oceania",
-    description:
-      "The famous Sydney Opera House by the harbor, one of the most recognized architectural wonders of Australia.",
-  },
+  // {
+  //   url: "https://images.pexels.com/photos/912897/pexels-photo-912897.jpeg",
+  //   city: "New York",
+  //   country: "United States",
+  //   continent: "North America",
+  //   description:
+  //     "The iconic Brooklyn Bridge connecting Manhattan with Brooklyn, one of New York’s most recognized structures.",
+  // },
+  // {
+  //   url: "https://images.pexels.com/photos/1929611/pexels-photo-1929611.jpeg",
+  //   city: "London",
+  //   country: "United Kingdom",
+  //   continent: "Europe",
+  //   description:
+  //     "The famous Big Ben next to Parliament, a symbol of the British government and a tourist icon.",
+  // },
+  // {
+  //   url: "https://images.pexels.com/photos/12238221/pexels-photo-12238221.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+  //   city: "Toronto",
+  //   country: "Canada",
+  //   continent: "North America",
+  //   description:
+  //     "The Toronto skyline with the CN Tower, one of the tallest buildings in the world and a symbol of the city.",
+  // },
+  // {
+  //   url: "https://images.unsplash.com/photo-1466442929976-97f336a657be?q=80&w=987&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+  //   city: "Cairo",
+  //   country: "Egypt",
+  //   continent: "Africa",
+  //   description:
+  //     "View of the Pyramids of Giza, one of the greatest architectural achievements of Egyptian civilization.",
+  // },
+  // {
+  //   url: "https://images.pexels.com/photos/3290070/pexels-photo-3290070.jpeg",
+  //   city: "Venice",
+  //   country: "Italy",
+  //   continent: "Europe",
+  //   description:
+  //     "The canals of Venice, a unique city built on water with its network of bridges and gondolas.",
+  // },
+  // {
+  //   url: "https://images.pexels.com/photos/1682794/pexels-photo-1682794.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+  //   city: "Dubai",
+  //   country: "United Arab Emirates",
+  //   continent: "Asia",
+  //   description:
+  //     "The modern skyline of Dubai with the Burj Khalifa, the tallest building in the world.",
+  // },
+  // {
+  //   url: "https://images.pexels.com/photos/19283363/pexels-photo-19283363/free-photo-of-taxis-on-street-in-hong-kong.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+  //   city: "Hong Kong",
+  //   country: "China",
+  //   continent: "Asia",
+  //   description:
+  //     "The vibrant streets of Hong Kong with its characteristic red taxis and modern architecture.",
+  // },
+  // {
+  //   url: "https://images.pexels.com/photos/15009437/pexels-photo-15009437/free-photo-of-ferryboat-cruising-near-the-sydney-opera-house.jpeg",
+  //   city: "Sydney",
+  //   country: "Australia",
+  //   continent: "Oceania",
+  //   description:
+  //     "The famous Sydney Opera House by the harbor, one of the most recognized architectural wonders of Australia.",
+  // },
 ];
 
 const CarouselFinal = () => {
@@ -159,12 +170,17 @@ const CarouselFinal = () => {
   const startX = useRef(0);
   const initialScroll = useRef(0);
   const [isTransitioning, setIsTransitioning] = useState(true);
-
   const [itemWidth, setItemWidth] = useState(0);
+
+  const { cities, loading, error } = useSelector((state) => state.citiesStore);
+
+
 
   useEffect(() => {
     // Calcular dimensiones al montar el componente
     calculateDimensions();
+    console.log("Se ejecuto el calculateDimensions to Scroll");
+
 
     // Crear una versión "debounceada" de calculateDimensions
     const debouncedHandleResize = debounce(calculateDimensions, 500); // 300ms de retraso
@@ -177,7 +193,7 @@ const CarouselFinal = () => {
       window.removeEventListener("resize", debouncedHandleResize);
       debouncedHandleResize.cancel();
     };
-  }, []);
+  }, [cities]);
 
   // Función para calcular dimensiones
   const calculateDimensions = () => {
@@ -214,6 +230,10 @@ const CarouselFinal = () => {
     }
   };
 
+  // if (loading) {
+  //   return <div>Cargando ciudades...</div>;
+  // }
+
   const handleNext = () => {
     setScrollAmount((prev) => {
       const newScrollAmount = Math.min(prev + step, maxScrollAmount);
@@ -228,7 +248,6 @@ const CarouselFinal = () => {
     });
   };
 
-  // Funciones para manejar el arrastre
   const handleMouseDown = (e) => {
     isDragging.current = true;
     startX.current = e.pageX - carouselRef.current.offsetLeft;
@@ -240,10 +259,8 @@ const CarouselFinal = () => {
     if (!isDragging.current) return;
     e.preventDefault();
     const x = e.pageX - carouselRef.current.offsetLeft;
-    const walk = x - startX.current; // Distancia arrastrada
+    const walk = x - startX.current;
     let newScroll = initialScroll.current - walk;
-
-    // Asegurarse de que newScroll esté dentro de los límites
     newScroll = Math.max(0, Math.min(newScroll, maxScrollAmount));
     setScrollAmount(newScroll);
   };
@@ -258,11 +275,8 @@ const CarouselFinal = () => {
     setIsTransitioning(true);
   };
 
-  // console.log("itemWidth", itemWidth);
-  // console.log("step", step);
-  // console.log("visibleWidth", visibleWidth);
-  // console.log("maxScrollAmount", maxScrollAmount);
-  // console.log("scrollAmount", scrollAmount);
+  const citiesToPaint = loading?images:cities
+
 
   return (
     <div className="carrousel-container">
@@ -307,7 +321,7 @@ const CarouselFinal = () => {
             </p>
           </div>
         </li>
-        {images.map((image, index) => {
+        {citiesToPaint.map((image, index) => {
           const parallaxCont = visibleWidth >= 640 ? 0.25 : 0.5;
           const itemInitial = visibleWidth >= 1024 ? visibleWidth * 0.4 : 0;
           const elementPosition = index * itemWidth + itemInitial;
