@@ -25,7 +25,7 @@ export default function Cities() {
 
   return (
     <>
-      <div style={styles} className="hero-background"></div>
+      <div style={styles} className="hero-background-cities "></div>
       <div>
           <label htmlFor="city">
             <input

@@ -14,32 +14,10 @@ const getCities = createAsyncThunk("getCities", async () => {
     
     console.log("Response", response);
     console.log("Se esta ejecutando dentro de asyncThunk getCities");
-    console.log(response.data);  //Aquí obtenemos los datos directamente
+    console.log(response.data);
 
-    return response.data.response;  //Si 'response' está en 'response.data.response'
+    return response.data.response;  
 });
-
-
-// const getCities = createAsyncThunk("getCities", async () => {
-//     console.log("Entramos al getCities");
-
-//     // Realiza la solicitud con el token en el encabezado
-//     const response = await fetch("http://localhost:8080/mytinerary/cities/all", {
-//         method: "GET",
-//         headers: {
-//             Authorization: `Bearer ${token}`
-//         }
-//     });
-
-//     console.log("Response", response);
-    
-//     // Convierte la respuesta a JSON
-//     const data = await response.json();
-//     console.log("Se esta ejecutando dentro de asyncThunk getCities");
-//     console.log(data.response);
-
-//     return data.response;  // Asegúrate de retornar la estructura correcta
-// });
 
 
 const getCitiesByName = createAsyncThunk("getCitieByName", async (name) => {
