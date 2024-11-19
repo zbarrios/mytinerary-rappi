@@ -5,13 +5,12 @@ import Cities from "./Pages/Cities";
 import NotFound from "./Pages/NotFound";
 import MainLayout from "./Layouts/MainLayout";
 import City from "./Pages/City";
+import PrivateRoute from "./Components/PrivateRoute";
 import SignIn from "./Pages/SignIn";
 import axios from "axios";
 import { useDispatch } from "react-redux";
 import { setUser } from "../store/actions/authActions";
-
-
-
+import SignRoute from "./Components/SignRoute";
 
 const router = createBrowserRouter([
   {
@@ -27,7 +26,11 @@ const router = createBrowserRouter([
       },
       {
         path: "/cities",
-        element: <Cities></Cities>,
+        element: (
+          <PrivateRoute>
+            <Cities></Cities>
+          </PrivateRoute>
+        ),
       },
       {
         path: "/city",
@@ -35,7 +38,11 @@ const router = createBrowserRouter([
       },
       {
         path: "/sign-in",
-        element: <SignIn></SignIn>,
+        element: (
+          <SignRoute>
+            <SignIn></SignIn>
+          </SignRoute>
+        ),
       },
     ],
   },

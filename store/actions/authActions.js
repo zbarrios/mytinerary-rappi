@@ -8,6 +8,8 @@ const setUser = createAction("setUser", (datos)=>{
     }
 })
 
+const logout = createAction("logout");
+
 //const setUser = createAction("setUser")
 
 
@@ -27,4 +29,4 @@ const login = createAsyncThunk("login", async({email,password}) => {
 }) //fullfilled,pending,rejected
 
 
-export {login,setUser};
+export {login,setUser,logout};
