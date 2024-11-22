@@ -12,8 +12,6 @@ const initialState = {
     builder.addCase(login.fulfilled,(state,action)=>{
         console.log("Se ejecuto correctamente");
         console.log(action);
-        
-        
         state.loading = false,
         state.error = false,
         state.user = action.payload.user,
